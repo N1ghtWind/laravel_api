@@ -17,8 +17,6 @@ class AuthController extends Controller
      * @param  [string] name
      * @param  [string] email
      * @param  [string] password
-     * @param  [string] password_confirmation
-     * @return [string] message
      */
     public function register(Request $request)
     {
@@ -94,6 +92,13 @@ class AuthController extends Controller
         ]);
     }
 
+
+    /**
+     *
+     * Get the authenticated User
+     * @param  \Illuminate\Http\Request  $request
+     *
+     */
     public function user(Request $request)
     {
         return response()->json($request->user());
