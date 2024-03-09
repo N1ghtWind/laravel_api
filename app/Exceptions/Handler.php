@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -18,13 +19,26 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     */
-    public function register(): void
+
+    public function render($request, Throwable $exception)
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        // Customize the response for API exceptions
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Method Not Allowed'], 405);
+        }
+
+        return parent::render($request, $exception);
     }
+
+    // protected function handleApiException($request, Throwable $exception)
+    // {
+    //     $statusCode = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500;
+
+    //     return response()->json([
+    //         'error' => [
+    //             'code' => $statusCode,
+    //             'message' => $exception->getMessage(),
+    //         ]
+    //     ], $statusCode);
+    // }
 }
